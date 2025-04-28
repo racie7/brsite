@@ -1,0 +1,117 @@
+import React, { useEffect } from 'react';
+import Link from 'next/link';
+
+export default function DTrader() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
+    script.async = true;
+    script.onload = () => {
+      new window.TradingView.widget({
+        container_id: 'tradingview_chart',
+        autosize: true,
+        symbol: 'FX:EURUSD', // ✅ VALID PUBLIC SYMBOL
+        interval: '1',
+        timezone: 'Etc/UTC',
+        theme: 'light',
+        style: '1',
+        locale: 'en',
+        enable_publishing: false,
+        hide_legend: true,
+        allow_symbol_change: false,
+      });
+    };
+    document.body.appendChild(script);
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Top Bar */}
+      <header className="bg-[#000E5D] text-white px-6 py-3 flex justify-between items-center shadow">
+        <div className="text-xl font-bold flex items-center gap-2">
+          <span className="bg-green-600 text-white px-2 py-1 rounded-sm text-sm">DP</span>
+          <span className="text-lg">Dollar Printer</span>
+          <span className="text-xs ml-2 text-gray-300">Powered by Deriv</span>
+        </div>
+
+        <div className="flex items-center gap-4 text-sm">
+          <button className="text-white bg-red-500 px-3 py-1 rounded">Risk Disclaimer</button>
+          <button className="text-green-400 hover:underline">Log in</button>
+          <button className="text-blue-300 hover:underline">Sign up</button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Chart Section */}
+        <div className="flex-1 bg-gray-100 relative">
+          <div className="absolute top-6 left-6 z-10">
+            <div className="bg-white shadow-md px-4 py-2 rounded-md flex items-center gap-4">
+              <div className="text-sm font-bold">📊 EUR/USD Chart</div>
+              <div className="text-xs text-gray-600">Live from TradingView</div>
+            </div>
+          </div>
+
+          {/* TradingView Chart Embed */}
+          <div id="tradingview_chart" className="w-full h-full" />
+        </div>
+
+        {/* Trade Panel */}
+        <aside className="w-[300px] bg-[#001F82] text-white p-6 flex flex-col justify-between">
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs mb-1 block text-gray-400">Trade type</label>
+              <div className="bg-white text-black px-3 py-2 rounded">📈 Accumulators</div>
+            </div>
+
+            <div>
+              <label className="text-xs block text-gray-300 mb-1">Growth rate</label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((rate) => (
+                  <button
+                    key={rate}
+                    className={`px-2 py-1 rounded text-sm ${rate === 3 ? 'bg-white text-black font-bold' : 'bg-gray-700'}`}
+                  >
+                    {rate}%
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs block text-gray-300 mb-1">Stake</label>
+              <div className="flex items-center gap-2">
+                <button className="bg-gray-700 px-2 rounded">-</button>
+                <input
+                  type="number"
+                  defaultValue={10}
+                  className="w-16 text-center text-black px-2 py-1 rounded"
+                />
+                <button className="bg-gray-700 px-2 rounded">+</button>
+                <span className="text-xs">AUD</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-gray-300">
+              <input type="checkbox" id="tp" />
+              <label htmlFor="tp">Take profit</label>
+            </div>
+
+            <div className="text-xs space-y-1 text-gray-400">
+              <div className="flex justify-between">
+                <span>Max. payout</span>
+                <span className="text-white">6,000.00 AUD</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Max. ticks</span>
+                <span className="text-white">85 ticks</span>
+              </div>
+            </div>
+          </div>
+
+          <button className="bg-green-400 text-black font-bold py-3 rounded mt-6 hover:bg-green-300">Buy →</button>
+        </aside>
+      </div>
+    </div>
+  );
+}
