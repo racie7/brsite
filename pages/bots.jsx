@@ -14,9 +14,9 @@ export default function FreeBots() {
     { name: 'Analysis Tool', href: '/analysis-tool' },
     { name: 'DP Tool', href: '/dp-tool' },
     { name: 'Free Bots', href: '/bots' },
-    { name: 'Copy Trading', href: '#' },
-    { name: 'Trading View', href: '#' },
-    { name: 'Risk Manager', href: '#' },
+    { name: 'Copy Trading', href: '/copy-trading' },
+    { name: 'Trading View', href: '/trading-view' },
+    { name: 'Risk Manager', href: '/risk-manager' },
   ];
 
   const bots = [

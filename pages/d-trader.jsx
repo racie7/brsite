@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 
+
 export default function DTrader() {
   useEffect(() => {
     const script = document.createElement('script');
@@ -24,6 +25,19 @@ export default function DTrader() {
     document.body.appendChild(script);
   }, []);
 
+  const loginWithDeriv = () => {
+    const APP_ID = process.env.NEXT_PUBLIC_DERIV_APP_ID;
+    const REDIRECT_URI = process.env.NEXT_PUBLIC_DERIV_REDIRECT_URI;
+  
+    if (!APP_ID || !REDIRECT_URI) {
+      alert("OAuth config missing. Check .env.local");
+      return;
+    }
+  
+    const oauthUrl = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+    window.location.href = oauthUrl;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Top Bar */}
@@ -36,8 +50,20 @@ export default function DTrader() {
 
         <div className="flex items-center gap-4 text-sm">
           <button className="text-white bg-red-500 px-3 py-1 rounded">Risk Disclaimer</button>
-          <button className="text-green-400 hover:underline">Log in</button>
-          <button className="text-blue-300 hover:underline">Sign up</button>
+          <button
+              onClick={loginWithDeriv}
+              className="text-green-400 hover:underline"
+            >
+              Log in with Deriv
+        </button>
+        <a
+          href="https://track.deriv.com/_l6qL8q_06CRMjdsyM5hasGNd7ZgqdRLk/1/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-300 hover:underline"
+        >
+          Sign up
+        </a>
         </div>
       </header>
 

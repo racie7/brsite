@@ -86,22 +86,27 @@ export default function RiskManagerPage() {
           <img src="/logo.png" alt="Logo" className="h-8" />
           <nav className="flex gap-5 text-sm font-medium">
             {[
-              "Dashboard",
-              "Bot Builder",
-              "D trader",
-              "Tutorials",
-              "Analysis Tool",
-              "DP Tool",
-              "Free Bots",
-              "Copy Trading",
-              "Trading View",
-              "Risk Manager",
+              { name: "Dashboard", href: "/dashboard" },
+              { name: "Bot Builder", href: "/bot-builder" },
+              { name: "D trader", href: "/d-trader" },
+              { name: "Tutorials", href: "/tutorials" },
+              { name: "Analysis Tool", href: "/analysis-tool" },
+              { name: "DP Tool", href: "/dp-tool" },
+              { name: "Free Bots", href: "/bots" },
+              { name: "Copy Trading", href: "/copy-trading" },
+              { name: "Trading View", href: "/trading-view" },
+              { name: "Risk Manager", href: "/risk-manager" },
             ].map((item, idx) => (
-              <Link key={idx} href="#" className="hover:underline">
-                {item}
+              <Link
+                key={idx}
+                href={item.href}
+                className="hover:underline hover:text-green-300"
+              >
+                {item.name}
               </Link>
             ))}
           </nav>
+
         </div>
         <div className="flex items-center gap-3 text-sm">
           <button className="bg-green-600 px-4 py-1 rounded text-white">deposit/withdraw</button>
