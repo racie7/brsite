@@ -1,3 +1,4 @@
+// 👇 Just continue with your current imports
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
@@ -8,6 +9,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function RiskManagerPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [accountSize, setAccountSize] = useState(1000);
   const [riskPercentage, setRiskPercentage] = useState(1);
   const [takeProfitPercentage, setTakeProfitPercentage] = useState(10);
@@ -71,44 +73,51 @@ export default function RiskManagerPage() {
   };
 
   const pieOptions = {
+    responsive: true,
     plugins: {
-      legend: {
-        position: "bottom",
-      },
+      legend: { position: "bottom" },
     },
   };
+
+  const navItems = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Bot Builder", href: "/bot-builder" },
+    { name: "D trader", href: "/d-trader" },
+    { name: "Tutorials", href: "/tutorials" },
+    { name: "Analysis Tool", href: "/analysis-tool" },
+    { name: "DP Tool", href: "/dp-tool" },
+    { name: "Free Bots", href: "/bots" },
+    { name: "Copy Trading", href: "/copy-trading" },
+    { name: "Trading View", href: "/trading-view" },
+    { name: "Risk Manager", href: "/risk-manager" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#f6f7f9] flex flex-col text-blue-900">
       {/* Navbar */}
-      <header className="bg-[#02152C] text-white px-6 py-4 flex justify-between items-center shadow">
-        <div className="flex items-center gap-6">
+      <header className="bg-[#02152C] text-white flex flex-wrap justify-between items-center px-4 py-3 shadow">
+        <div className="flex items-center justify-between w-full md:w-auto">
           <img src="/logo.png" alt="Logo" className="h-8" />
-          <nav className="flex gap-5 text-sm font-medium">
-            {[
-              { name: "Dashboard", href: "/dashboard" },
-              { name: "Bot Builder", href: "/bot-builder" },
-              { name: "D trader", href: "/d-trader" },
-              { name: "Tutorials", href: "/tutorials" },
-              { name: "Analysis Tool", href: "/analysis-tool" },
-              { name: "DP Tool", href: "/dp-tool" },
-              { name: "Free Bots", href: "/bots" },
-              { name: "Copy Trading", href: "/copy-trading" },
-              { name: "Trading View", href: "/trading-view" },
-              { name: "Risk Manager", href: "/risk-manager" },
-            ].map((item, idx) => (
-              <Link
-                key={idx}
-                href={item.href}
-                className="hover:underline hover:text-green-300"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white text-2xl">
+            ☰
+          </button>
         </div>
-        <div className="flex items-center gap-3 text-sm">
+
+        <nav className={`w-full md:flex md:gap-4 text-sm font-medium mt-4 md:mt-0 ${menuOpen ? 'block' : 'hidden'}`}>
+          {navItems.map(({ name, href }) => (
+            <Link
+              key={name}
+              href={href}
+              className={`block px-2 py-1 ${
+                href === "/risk-manager" ? "text-green-300 underline font-semibold" : "hover:underline"
+              }`}
+            >
+              {name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex items-center gap-3 text-sm ml-auto mt-4 md:mt-0">
           <button className="bg-green-600 px-4 py-1 rounded text-white">deposit/withdraw</button>
           <span className="text-yellow-300 font-bold">💰 9,994.50 USD</span>
           <button className="bg-blue-500 px-4 py-1 rounded">Deposit</button>
@@ -116,12 +125,10 @@ export default function RiskManagerPage() {
       </header>
 
       {/* Main */}
-      <main className="flex-1 flex flex-col items-center p-8 gap-6">
-        <div ref={riskRef} className="bg-white rounded-lg shadow-md p-8 w-full max-w-xl">
+      <main className="flex-1 flex flex-col items-center p-4 sm:p-6 gap-6">
+        <div ref={riskRef} className="bg-white rounded-lg shadow-md p-4 sm:p-8 w-full max-w-xl">
           <h1 className="text-2xl font-bold text-center mb-2">Risk Manager Calculator</h1>
-          <p className="text-center text-sm text-gray-500 mb-6">
-            Manage your trading risk with precision
-          </p>
+          <p className="text-center text-sm text-gray-500 mb-6">Manage your trading risk with precision</p>
 
           <hr className="border-blue-300 mb-6" />
 
@@ -147,8 +154,8 @@ export default function RiskManagerPage() {
               />
             </div>
 
-            <div className="flex gap-4">
-              <div className="w-1/2">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="w-full">
                 <label className="block text-sm font-medium mb-1">Take Profit (%)</label>
                 <input
                   type="number"
@@ -157,7 +164,7 @@ export default function RiskManagerPage() {
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
                 />
               </div>
-              <div className="w-1/2">
+              <div className="w-full">
                 <label className="block text-sm font-medium mb-1">Stop Loss (%)</label>
                 <input
                   type="number"
@@ -195,11 +202,13 @@ export default function RiskManagerPage() {
           {/* Chart */}
           <div className="mt-8">
             <h3 className="text-lg font-bold mb-2 text-center">Risk Visualization</h3>
-            <Pie data={pieData} options={pieOptions} />
+            <div className="max-w-xs mx-auto">
+              <Pie data={pieData} options={pieOptions} />
+            </div>
           </div>
 
           {/* Actions */}
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
             <button
               onClick={savePlan}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
@@ -229,7 +238,7 @@ export default function RiskManagerPage() {
             </div>
             <ul className="space-y-3 text-sm text-gray-700">
               {savedPlans.map((plan, idx) => (
-                <li key={idx} className="border-b pb-2">
+                <li key={idx} className="border-b pb-2 break-words">
                   {plan.date} — Account: ${plan.accountSize}, Risk: {plan.riskPercentage}%, TP: {plan.takeProfitPercentage}%, SL: {plan.stopLossPercentage}%
                 </li>
               ))}

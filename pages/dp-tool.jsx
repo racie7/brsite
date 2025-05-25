@@ -40,36 +40,40 @@ export default function DPTool() {
   return (
     <div className="min-h-screen bg-[#05051a] text-white flex flex-col">
       {/* Top Nav */}
-      <header className="bg-[#02152C] text-white flex justify-between items-center px-6 py-4 shadow">
-        <div className="flex items-center gap-6">
-          <img src="/logo.png" alt="Logo" className="h-8" />
-          <nav className="flex gap-5 text-sm font-medium">
-            {navItems.map(({ name, href }) => (
-              <Link
-                key={name}
-                href={href}
-                className={`${
-                  router.pathname === href
-                    ? 'text-green-300 underline font-semibold'
-                    : 'hover:underline'
-                }`}
-              >
-                {name}
-              </Link>
-            ))}
-          </nav>
+      <header className="bg-[#02152C] text-white flex flex-wrap justify-between items-center px-4 py-3 shadow">
+        <div className="flex items-center justify-between w-full md:w-auto">
+          <div className="flex items-center gap-4">
+            <img src="/logo.png" alt="Logo" className="h-8" />
+          </div>
         </div>
-        <div className="flex items-center gap-3 text-sm">
-          <button className="bg-green-600 px-4 py-1 rounded text-white">deposit/withdraw</button>
+
+        <nav className="hidden md:flex gap-4 text-sm font-medium mt-4 md:mt-0">
+          {navItems.map(({ name, href }) => (
+            <Link
+              key={name}
+              href={href}
+              className={`${
+                router.pathname === href
+                  ? 'text-green-300 underline font-semibold'
+                  : 'hover:underline'
+              }`}
+            >
+              {name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex items-center gap-3 text-sm ml-auto mt-4 md:mt-0">
+          <button className="bg-green-600 px-4 py-1 rounded">deposit/withdraw</button>
           <span className="text-yellow-300 font-bold">💰 9,994.50 USD</span>
           <button className="bg-blue-500 px-4 py-1 rounded">Deposit</button>
         </div>
       </header>
 
-      {/* Main */}
-      <div className="flex flex-1">
-        {/* Left Sidebar */}
-        <aside className="w-[250px] bg-gradient-to-b from-[#0e1f3c] to-[#2d6e9b] p-6">
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row flex-1">
+        {/* Sidebar */}
+        <aside className="w-full md:w-[250px] bg-gradient-to-b from-[#0e1f3c] to-[#2d6e9b] p-6">
           <div className="text-xl font-bold mb-2">Analysis</div>
           <p className="text-xs text-gray-300 mb-6">Trading Pattern Recognition</p>
 
@@ -101,25 +105,25 @@ export default function DPTool() {
             </select>
           </div>
 
-          <div className="flex justify-between text-xs font-bold">
+          <div className="flex flex-wrap justify-between text-xs font-bold gap-2">
             <span className="bg-blue-500 px-4 py-1 rounded-full text-white">Even: 47.20%</span>
             <span className="bg-pink-500 px-4 py-1 rounded-full text-white">Odd: 52.80%</span>
           </div>
         </aside>
 
         {/* Content */}
-        <main className="flex-1 p-8 space-y-8">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-8">
           {/* Buttons */}
-          <div className="flex justify-center gap-6">
+          <div className="flex flex-wrap justify-center gap-4">
             <button
               onClick={() => setIsAnalyzing((prev) => !prev)}
-              className={`px-8 py-4 text-xl font-bold rounded ${isAnalyzing ? 'bg-red-600' : 'bg-green-600'}`}
+              className={`px-6 py-3 text-lg font-bold rounded ${isAnalyzing ? 'bg-red-600' : 'bg-green-600'}`}
             >
               {isAnalyzing ? 'Stop Analysis' : 'Start Analysis'}
             </button>
             <button
               onClick={() => setIsPredicting((prev) => !prev)}
-              className={`px-8 py-4 text-xl font-bold rounded ${isPredicting ? 'bg-red-600' : 'bg-green-600'}`}
+              className={`px-6 py-3 text-lg font-bold rounded ${isPredicting ? 'bg-red-600' : 'bg-green-600'}`}
             >
               {isPredicting ? 'Stop Predictions' : 'Start Predictions'}
             </button>
@@ -128,7 +132,7 @@ export default function DPTool() {
           {/* Digits Display */}
           <div className="text-center">
             <div className="text-2xl mb-2 font-bold">Latest Tick:</div>
-            <div className="flex justify-center gap-4 text-xl">
+            <div className="flex flex-wrap justify-center gap-3 text-xl">
               {Array.from({ length: 10 }, (_, i) => (
                 <div key={i} className="bg-orange-400 w-10 h-10 flex items-center justify-center rounded-full">
                   {i}
@@ -137,11 +141,11 @@ export default function DPTool() {
             </div>
           </div>
 
-          {/* Matches and Differs */}
+          {/* Matches & Differs */}
           <div className="text-center">
             <div className="text-orange-400 text-2xl mb-2 font-bold">Matches and Differs</div>
-            <div className="flex justify-center">
-              <table className="border border-orange-400">
+            <div className="overflow-x-auto">
+              <table className="mx-auto border border-orange-400 text-sm">
                 <thead>
                   <tr>
                     <th className="border border-orange-400 px-4 py-2">Matches</th>
@@ -158,42 +162,42 @@ export default function DPTool() {
             </div>
           </div>
 
-          {/* Even and Odd */}
+          {/* Even & Odd */}
           <div className="text-center">
             <div className="text-orange-400 text-2xl mb-2 font-bold">Even and Odd</div>
-            <div className="flex justify-center">
-              <table className="border border-orange-400">
+            <div className="overflow-x-auto">
+              <table className="mx-auto border border-orange-400 text-sm">
                 <thead>
                   <tr>
-                    <th className="border border-orange-400 px-8 py-2">Even</th>
-                    <th className="border border-orange-400 px-8 py-2">Percentage</th>
-                    <th className="border border-orange-400 px-8 py-2">--</th>
+                    <th className="border border-orange-400 px-6 py-2">Even</th>
+                    <th className="border border-orange-400 px-6 py-2">Percentage</th>
+                    <th className="border border-orange-400 px-6 py-2">--</th>
                   </tr>
                   <tr>
-                    <th className="border border-orange-400 px-8 py-2">Odd</th>
-                    <th className="border border-orange-400 px-8 py-2">Percentage</th>
-                    <th className="border border-orange-400 px-8 py-2">--</th>
+                    <th className="border border-orange-400 px-6 py-2">Odd</th>
+                    <th className="border border-orange-400 px-6 py-2">Percentage</th>
+                    <th className="border border-orange-400 px-6 py-2">--</th>
                   </tr>
                 </thead>
               </table>
             </div>
           </div>
 
-          {/* Over and Under */}
+          {/* Over & Under */}
           <div className="text-center">
             <div className="text-orange-400 text-2xl mb-2 font-bold">Over and Under</div>
-            <div className="flex justify-center">
-              <table className="border border-orange-400">
+            <div className="overflow-x-auto">
+              <table className="mx-auto border border-orange-400 text-sm">
                 <thead>
                   <tr>
-                    <th className="border border-orange-400 px-8 py-2">Over</th>
-                    <th className="border border-orange-400 px-8 py-2">Percentage</th>
-                    <th className="border border-orange-400 px-8 py-2">--</th>
+                    <th className="border border-orange-400 px-6 py-2">Over</th>
+                    <th className="border border-orange-400 px-6 py-2">Percentage</th>
+                    <th className="border border-orange-400 px-6 py-2">--</th>
                   </tr>
                   <tr>
-                    <th className="border border-orange-400 px-8 py-2">Under</th>
-                    <th className="border border-orange-400 px-8 py-2">Percentage</th>
-                    <th className="border border-orange-400 px-8 py-2">--</th>
+                    <th className="border border-orange-400 px-6 py-2">Under</th>
+                    <th className="border border-orange-400 px-6 py-2">Percentage</th>
+                    <th className="border border-orange-400 px-6 py-2">--</th>
                   </tr>
                 </thead>
               </table>
