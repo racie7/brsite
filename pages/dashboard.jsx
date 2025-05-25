@@ -50,7 +50,16 @@ export default function Dashboard() {
 
         {/* Right side buttons */}
         <div className="hidden md:flex items-center gap-4 ml-auto mt-4 md:mt-0">
-          <button className="bg-red-500 px-3 py-1 rounded text-sm">Telegram</button>
+          <a
+          href="https://t.me/Detrabots"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button className="bg-red-500 px-3 py-1 rounded text-sm">
+            Telegram
+          </button>
+        </a>
+
           <button className="bg-green-600 px-4 py-1 rounded text-sm">deposit/withdraw</button>
           <span className="text-[#00ffcc] font-bold">💰 9,994.50 USD</span>
           <button className="bg-blue-600 px-4 py-1 rounded text-sm">Deposit</button>
