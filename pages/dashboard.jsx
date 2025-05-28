@@ -117,7 +117,6 @@ export default function Dashboard() {
             <button className="text-gray-400">❌</button>
           </div>
           <p className="text-yellow-400 text-xl">✨</p>
-          <p className="text-blue-800">Trade like a pro, profit like a boss! 🔥</p>
         </aside>
       </div>
     </div>
