@@ -5,6 +5,13 @@ import { useRouter } from "next/router";
 export default function TradingViewPage() {
   const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token'); // Or sessionStorage
+    if (!token) {
+      router.push('/auth/login'); // or trigger loginWithDeriv()
+    }
+  }, []);
+
   const [symbol, setSymbol] = useState("BTCUSD");
   const [interval, setInterval] = useState("1");
   const [theme, setTheme] = useState("dark");

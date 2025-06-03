@@ -15,6 +15,12 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function AnalysisTool() {
   const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token'); // Or sessionStorage
+    if (!token) {
+      router.push('/auth/login'); // or trigger loginWithDeriv()
+    }
+  }, []);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navItems = [

@@ -4,6 +4,12 @@ import { useRouter } from 'next/router';
 
 export default function CopyTrading() {
   const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token'); // Or sessionStorage
+    if (!token) {
+      router.push('/auth/login'); // or trigger loginWithDeriv()
+    }
+  }, []);
   const [activeTab, setActiveTab] = useState('Trader Data');
   const [tokenInput, setTokenInput] = useState('');
   const [tokens, setTokens] = useState([]);

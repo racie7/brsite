@@ -1,29 +1,20 @@
-import { useEffect } from 'react';
+// pages/auth/callback.jsx
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-export default function CallbackPage() {
+export default function Callback() {
   const router = useRouter();
 
   useEffect(() => {
-    // Get token from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    const query = new URLSearchParams(window.location.search);
+    const token = query.get('token');
 
     if (token) {
-      // Save to localStorage or cookies
-      localStorage.setItem('deriv_token', token);
-
-      // Redirect to dashboard or home
-      router.push('/dashboard');
-    } else {
-      // Redirect to login if no token
-      router.push('/');
+      localStorage.setItem('deriv_token', token); // or use cookies
+      router.push('/dashboard'); // or push to where they intended to go
     }
   }, []);
 
-  return (
-    <div className="h-screen flex items-center justify-center">
-      <p className="text-blue-800">Processing login, please wait...</p>
-    </div>
-  );
+  return <p className="p-10 text-center">Logging in... Please wait.</p>;
 }
+

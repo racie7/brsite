@@ -5,6 +5,13 @@ import { useRouter } from 'next/router';
 export default function DPTool() {
   const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token'); // Or sessionStorage
+    if (!token) {
+      router.push('/auth/login'); // or trigger loginWithDeriv()
+    }
+  }, []);
+
   const navItems = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Bot Builder', href: '/bot-builder' },

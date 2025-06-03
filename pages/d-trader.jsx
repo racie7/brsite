@@ -3,6 +3,12 @@ import Link from 'next/link';
 
 export default function DTrader() {
   useEffect(() => {
+    const token = localStorage.getItem('auth_token'); // Or sessionStorage
+    if (!token) {
+      router.push('/auth/login'); // or trigger loginWithDeriv()
+    }
+  }, []);
+  useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://s3.tradingview.com/tv.js';
     script.async = true;
