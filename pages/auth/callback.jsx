@@ -6,20 +6,17 @@ export default function Callback() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!router.isReady) return; // wait for the router to hydrate
-
-    const token = router.query.token;
+    const query = new URLSearchParams(window.location.search);
+    const token = query.get('token') || query.get('token1'); // support both
 
     if (token) {
       localStorage.setItem('deriv_token', token);
-      router.replace('/dashboard');
+      router.replace('/dashboard'); // prevent stacking in history
     } else {
-      // Optional: fallback if token is missing
-      console.warn('No token found in query params');
-      router.replace('/'); // or show error message / redirect home
+      // Handle missing token gracefully
+      router.replace('/auth/login');
     }
-  }, [router.isReady]);
+  }, []);
 
   return <p className="p-10 text-center">Logging in... Please wait.</p>;
 }
-
