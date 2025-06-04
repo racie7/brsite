@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useAuthRedirect from '../utils/useAuthRedirect';
+import Header from '../components/Header';
 
 export default function DPTool() {
   const router = useRouter();
@@ -43,35 +44,7 @@ export default function DPTool() {
   return (
     <div className="min-h-screen bg-[#05051a] text-white flex flex-col">
       {/* Top Nav */}
-      <header className="bg-[#02152C] text-white flex flex-wrap justify-between items-center px-4 py-3 shadow">
-        <div className="flex items-center justify-between w-full md:w-auto">
-          <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="Logo" className="h-8" />
-          </div>
-        </div>
-
-        <nav className="hidden md:flex gap-4 text-sm font-medium mt-4 md:mt-0">
-          {navItems.map(({ name, href }) => (
-            <Link
-              key={name}
-              href={href}
-              className={`${
-                router.pathname === href
-                  ? 'text-green-300 underline font-semibold'
-                  : 'hover:underline'
-              }`}
-            >
-              {name}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden md:flex items-center gap-3 text-sm ml-auto mt-4 md:mt-0">
-          <button className="bg-green-600 px-4 py-1 rounded">deposit/withdraw</button>
-          <span className="text-yellow-300 font-bold">💰 9,994.50 USD</span>
-          <button className="bg-blue-500 px-4 py-1 rounded">Deposit</button>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="flex flex-col md:flex-row flex-1">

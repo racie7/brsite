@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import useAuthRedirect from '../utils/useAuthRedirect';
+import Header from '../components/Header';
 
 export default function DTrader() {
   useAuthRedirect();
@@ -42,26 +43,7 @@ export default function DTrader() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Top Bar */}
-      <header className="bg-[#000E5D] text-white px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center shadow">
-        <div className="text-lg font-bold flex items-center gap-2 w-full sm:w-auto">
-          <span className="bg-green-600 text-white px-2 py-1 rounded-sm text-sm">DP</span>
-          <span>Dollar Printer</span>
-          <span className="text-xs text-gray-300 hidden sm:inline">Powered by Deriv</span>
-        </div>
-
-        {/* <div className="flex flex-wrap gap-3 mt-4 sm:mt-0 sm:gap-4 text-sm w-full sm:w-auto justify-start sm:justify-end">
-          <button className="bg-red-500 px-3 py-1 rounded text-white">Risk Disclaimer</button>
-          <button onClick={loginWithDeriv} className="text-green-400 hover:underline">Log in with Deriv</button>
-          <a
-            href="https://track.deriv.com/_l6qL8q_06CRMjdsyM5hasGNd7ZgqdRLk/1/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-300 hover:underline"
-          >
-            Sign up
-          </a>
-        </div> */}
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
