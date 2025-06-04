@@ -41,51 +41,75 @@ export default function Header() {
 
   return (
     <header className="bg-[#02152C] text-white flex flex-wrap justify-between items-center px-4 py-3 shadow relative">
-      <div className="flex items-center justify-between w-full md:w-auto">
-        <div className="flex items-center gap-4">
-          <img src="/logo.png" alt="Logo" className="h-8" />
-          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
-            ☰
-          </button>
-        </div>
-      </div>
+  {/* Logo + burger */}
+  <div className="flex items-center justify-between w-full md:w-auto">
+    <div className="flex items-center gap-4">
+      <img src="/logo.png" alt="Logo" className="h-8" />
+      <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
+        ☰
+      </button>
+    </div>
+  </div>
 
-      <nav className={`w-full md:flex md:gap-4 text-sm font-medium mt-4 md:mt-0 ${menuOpen ? 'block' : 'hidden'}`}>
-        {navItems.map(({ name, href }) => (
-          <Link
-            key={name}
-            href={href}
-            className={`block px-2 py-1 ${
-              router.pathname === href ? 'underline text-green-300 font-bold' : 'hover:underline'
-            }`}
-          >
-            {name}
-          </Link>
-        ))}
-      </nav>
+  {/* Navigation links */}
+  <nav className={`w-full md:flex md:gap-4 text-sm font-medium mt-4 md:mt-0 ${menuOpen ? 'block' : 'hidden'}`}>
+    {navItems.map(({ name, href }) => (
+      <Link
+        key={name}
+        href={href}
+        className={`block px-2 py-1 ${
+          router.pathname === href ? 'underline text-green-300 font-bold' : 'hover:underline'
+        }`}
+      >
+        {name}
+      </Link>
+    ))}
 
-      <div className="hidden md:flex items-center gap-4 ml-auto mt-4 md:mt-0">
-        <button className="bg-green-600 px-4 py-1 rounded text-sm">deposit/withdraw</button>
+    {/* Dynamic buttons – show on mobile when menu is open */}
+    <div className="flex flex-col gap-2 mt-4 md:hidden">
+      <button className="bg-green-600 px-4 py-1 rounded text-sm w-full">deposit/withdraw</button>
+      {balance !== null ? (
+        <span className="text-[#00ffcc] font-bold text-center">
+          💰 {balance.toFixed(2)} {currency} ({loginid})
+        </span>
+      ) : (
+        <span className="text-[#00ffcc] text-center">Fetching...</span>
+      )}
+      <button className="bg-blue-600 px-4 py-1 rounded text-sm w-full">Deposit</button>
+      <button
+        onClick={() => {
+          localStorage.removeItem('deriv_token');
+          router.push('/auth/login');
+        }}
+        className="bg-red-600 px-4 py-1 rounded text-sm w-full"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
 
-        {balance !== null ? (
-          <span className="text-[#00ffcc] font-bold">
-            💰 {balance.toFixed(2)} {currency} ({loginid})
-          </span>
-        ) : (
-          <span className="text-[#00ffcc]">Fetching...</span>
-        )}
+  {/* Dynamic buttons – desktop only */}
+  <div className="hidden md:flex items-center gap-4 ml-auto mt-4 md:mt-0">
+    <button className="bg-green-600 px-4 py-1 rounded text-sm">deposit/withdraw</button>
+    {balance !== null ? (
+      <span className="text-[#00ffcc] font-bold">
+        💰 {balance.toFixed(2)} {currency} ({loginid})
+      </span>
+    ) : (
+      <span className="text-[#00ffcc]">Fetching...</span>
+    )}
+    <button className="bg-blue-600 px-4 py-1 rounded text-sm">Deposit</button>
+    <button
+      onClick={() => {
+        localStorage.removeItem('deriv_token');
+        router.push('/auth/login');
+      }}
+      className="bg-red-600 px-4 py-1 rounded text-sm"
+    >
+      Logout
+    </button>
+  </div>
+</header>
 
-        <button className="bg-blue-600 px-4 py-1 rounded text-sm">Deposit</button>
-        <button
-          onClick={() => {
-            localStorage.removeItem('deriv_token');
-            router.push('/auth/login');
-          }}
-          className="bg-red-600 px-4 py-1 rounded text-sm"
-        >
-          Logout
-        </button>
-      </div>
-    </header>
   );
 }
