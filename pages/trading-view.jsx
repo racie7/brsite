@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useAuthRedirect from '../utils/useAuthRedirect';
 
 export default function TradingViewPage() {
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token'); // Or sessionStorage
-    if (!token) {
-      router.push('/auth/login'); // or trigger loginWithDeriv()
-    }
-  }, []);
+ useAuthRedirect();
 
   const [symbol, setSymbol] = useState("BTCUSD");
   const [interval, setInterval] = useState("1");
