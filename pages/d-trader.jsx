@@ -49,7 +49,7 @@ export default function DTrader() {
           <span className="text-xs text-gray-300 hidden sm:inline">Powered by Deriv</span>
         </div>
 
-        <div className="flex flex-wrap gap-3 mt-4 sm:mt-0 sm:gap-4 text-sm w-full sm:w-auto justify-start sm:justify-end">
+        {/* <div className="flex flex-wrap gap-3 mt-4 sm:mt-0 sm:gap-4 text-sm w-full sm:w-auto justify-start sm:justify-end">
           <button className="bg-red-500 px-3 py-1 rounded text-white">Risk Disclaimer</button>
           <button onClick={loginWithDeriv} className="text-green-400 hover:underline">Log in with Deriv</button>
           <a
@@ -60,7 +60,7 @@ export default function DTrader() {
           >
             Sign up
           </a>
-        </div>
+        </div> */}
       </header>
 
       {/* Main Content */}
