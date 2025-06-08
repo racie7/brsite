@@ -89,26 +89,26 @@ export default function Header() {
   </nav>
 
   {/* Dynamic buttons – desktop only */}
-  <div className="hidden md:flex items-center gap-4 ml-auto mt-4 md:mt-0">
-    <button className="bg-green-600 px-4 py-1 rounded text-sm">deposit/withdraw</button>
-    {balance !== null ? (
-      <span className="text-[#00ffcc] font-bold">
-        💰 {balance.toFixed(2)} {currency} ({loginid})
-      </span>
-    ) : (
-      <span className="text-[#00ffcc]">Fetching...</span>
-    )}
-    <button className="bg-blue-600 px-4 py-1 rounded text-sm">Deposit</button>
-    <button
-      onClick={() => {
-        localStorage.removeItem('deriv_token');
-        router.push('/auth/login');
-      }}
-      className="bg-red-600 px-4 py-1 rounded text-sm"
-    >
-      Logout
-    </button>
-  </div>
+    <div className="absolute right-4 top-3 md:hidden flex flex-col items-end gap-1">
+      <button className="bg-green-600 px-3 py-1 rounded text-xs">deposit/withdraw</button>
+      {balance !== null ? (
+        <span className="text-[#00ffcc] font-bold text-xs">
+          💰 {balance.toFixed(2)} {currency} ({loginid})
+        </span>
+      ) : (
+        <span className="text-[#00ffcc] text-xs">Fetching...</span>
+      )}
+      <button className="bg-blue-600 px-3 py-1 rounded text-xs">Deposit</button>
+      <button
+        onClick={() => {
+          localStorage.removeItem('deriv_token');
+          router.push('/auth/login');
+        }}
+        className="bg-red-600 px-3 py-1 rounded text-xs"
+      >
+        Logout
+      </button>
+    </div>
 </header>
 
   );
