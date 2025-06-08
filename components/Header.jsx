@@ -90,6 +90,13 @@ export default function Header() {
         </nav>
       </header>
 
+      {/* Add bottom padding to page content to prevent button overlap */}
+      <style jsx global>{`
+        main {
+          padding-bottom: 6rem; /* ensure enough space for sticky buttons */
+        }
+      `}</style>
+
       {/* Mobile Bottom Sticky Controls */}
       <div className="fixed bottom-2 left-1/2 -translate-x-1/2 md:hidden z-50 bg-[#02152C] px-4 py-2 rounded-full shadow-lg flex gap-2 items-center">
         <button className="bg-blue-600 text-white px-3 py-1 rounded text-xs">Deposit</button>
