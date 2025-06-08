@@ -89,27 +89,27 @@ export default function Header() {
   </nav>
 
   {/* Dynamic buttons – desktop only */}
-    <div className="absolute right-4 top-3 md:hidden flex flex-col items-end gap-1">
-      <button className="bg-green-600 px-3 py-1 rounded text-xs">deposit/withdraw</button>
-      {balance !== null ? (
-        <span className="text-[#00ffcc] font-bold text-xs">
-          💰 {balance.toFixed(2)} {currency} ({loginid})
-        </span>
-      ) : (
-        <span className="text-[#00ffcc] text-xs">Fetching...</span>
-      )}
-      <button className="bg-blue-600 px-3 py-1 rounded text-xs">Deposit</button>
-      <button
-        onClick={() => {
-          localStorage.removeItem('deriv_token');
-          router.push('/auth/login');
-        }}
-        className="bg-red-600 px-3 py-1 rounded text-xs"
-      >
-        Logout
-      </button>
-    </div>
-</header>
+      <div className="fixed right-2 top-2 md:hidden flex flex-col items-end gap-2 z-50">
+        {balance !== null ? (
+          <span className="text-[#00ffcc] font-bold text-xs bg-[#02152C] px-2 py-1 rounded shadow">
+            💰 {balance.toFixed(2)} {currency} ({loginid})
+          </span>
+        ) : (
+          <span className="text-[#00ffcc] text-xs bg-[#02152C] px-2 py-1 rounded shadow">Fetching...</span>
+        )}
+        <button className="bg-blue-600 text-white px-4 py-1 rounded text-xs shadow">Deposit</button>
+        <button className="bg-green-600 text-white px-4 py-1 rounded text-xs shadow">Withdraw</button>
+        <button
+          onClick={() => {
+            localStorage.removeItem('deriv_token');
+            router.push('/auth/login');
+          }}
+          className="bg-red-600 text-white px-4 py-1 rounded text-xs shadow"
+        >
+          Logout
+        </button>
+      </div>
+   </header>
 
   );
 }
