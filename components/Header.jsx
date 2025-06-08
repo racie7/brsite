@@ -1,8 +1,7 @@
-// components/Header.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { getDerivBalance } from '../utils/derivSocket'; 
+import { getDerivBalance } from '../utils/derivSocket';
 
 export default function Header() {
   const router = useRouter();
@@ -10,6 +9,8 @@ export default function Header() {
   const [balance, setBalance] = useState(null);
   const [currency, setCurrency] = useState('');
   const [loginid, setLoginid] = useState('');
+  const [showMobileControls, setShowMobileControls] = useState(true);
+  const lastScrollY = useRef(0);
 
   const navItems = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -39,77 +40,108 @@ export default function Header() {
     }
   }, []);
 
-  return (
-    <header className="bg-[#02152C] text-white flex flex-wrap justify-between items-center px-4 py-3 shadow relative">
-  {/* Logo + burger */}
-  <div className="flex items-center justify-between w-full md:w-auto">
-    <div className="flex items-center gap-4">
-      <img src="/logo.png" alt="Logo" className="h-8" />
-      <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
-        ☰
-      </button>
-    </div>
-  </div>
+  // Scroll listener to show/hide mobile controls
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY > lastScrollY.current) {
+        setShowMobileControls(false); // scrolling down
+      } else {
+        setShowMobileControls(true); // scrolling up
+      }
+      lastScrollY.current = currentY;
+    };
 
-  {/* Navigation links */}
-  <nav className={`w-full md:flex md:gap-4 text-sm font-medium mt-4 md:mt-0 ${menuOpen ? 'block' : 'hidden'}`}>
-    {navItems.map(({ name, href }) => (
-      <Link
-        key={name}
-        href={href}
-        className={`block px-2 py-1 ${
-          router.pathname === href ? 'underline text-green-300 font-bold' : 'hover:underline'
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header className="bg-[#02152C] text-white px-4 py-3 shadow relative z-40">
+      {/* Top Row */}
+      <div className="flex justify-between items-center w-full">
+        {/* Logo + Burger */}
+        <div className="flex items-center gap-4">
+          <img src="/logo.png" alt="Logo" className="h-8" />
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
+            ☰
+          </button>
+        </div>
+
+        {/* Desktop controls */}
+        <div className="hidden md:flex items-center gap-4">
+          <button className="bg-green-600 text-white px-4 py-1 rounded text-sm shadow">Withdraw</button>
+          {balance !== null ? (
+            <span className="text-[#00ffcc] font-bold text-sm">
+              💰 {balance.toFixed(2)} {currency} ({loginid})
+            </span>
+          ) : (
+            <span className="text-[#00ffcc] text-sm">Fetching...</span>
+          )}
+          <button className="bg-blue-600 text-white px-4 py-1 rounded text-sm shadow">Deposit</button>
+          <button
+            onClick={() => {
+              localStorage.removeItem('deriv_token');
+              router.push('/auth/login');
+            }}
+            className="bg-red-600 text-white px-4 py-1 rounded text-sm shadow"
+          >
+            Logout
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={() => alert('Hook this to your theme logic 🌗')}
+            className="text-yellow-300 text-lg ml-2"
+            title="Toggle Theme"
+          >
+            🌙
+          </button>
+        </div>
+      </div>
+
+      {/* Navigation links */}
+      <nav className={`w-full md:flex md:gap-4 text-sm font-medium mt-4 md:mt-2 ${menuOpen ? 'block' : 'hidden'}`}>
+        {navItems.map(({ name, href }) => (
+          <Link
+            key={name}
+            href={href}
+            className={`block px-2 py-1 ${
+              router.pathname === href ? 'underline text-green-300 font-bold' : 'hover:underline'
+            }`}
+          >
+            {name}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Sticky mobile top-right controls with animation */}
+      <div
+        className={`fixed top-2 right-2 md:hidden flex flex-col items-end gap-2 z-50 w-32 transition-all duration-300 ${
+          showMobileControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
         }`}
       >
-        {name}
-      </Link>
-    ))}
-
-    {/* Dynamic buttons – show on mobile when menu is open */}
-    <div className="flex flex-col gap-2 mt-4 md:hidden">
-      <button className="bg-green-600 px-4 py-1 rounded text-sm w-full">deposit/withdraw</button>
-      {balance !== null ? (
-        <span className="text-[#00ffcc] font-bold text-center">
-          💰 {balance.toFixed(2)} {currency} ({loginid})
-        </span>
-      ) : (
-        <span className="text-[#00ffcc] text-center">Fetching...</span>
-      )}
-      <button className="bg-blue-600 px-4 py-1 rounded text-sm w-full">Deposit</button>
-      <button
-        onClick={() => {
-          localStorage.removeItem('deriv_token');
-          router.push('/auth/login');
-        }}
-        className="bg-red-600 px-4 py-1 rounded text-sm w-full"
-      >
-        Logout
-      </button>
-    </div>
-  </nav>
-
-  {/* Dynamic buttons – desktop only */}
-      <div className="hidden md:flex items-center gap-4 ml-auto">
-        <button className="bg-green-600 text-white px-4 py-1 rounded text-sm shadow">Withdraw</button>
         {balance !== null ? (
-          <span className="text-[#00ffcc] font-bold text-sm">
+          <span className="text-[#00ffcc] font-bold text-xs bg-[#02152C] px-2 py-1 rounded shadow text-center w-full">
             💰 {balance.toFixed(2)} {currency} ({loginid})
           </span>
         ) : (
-          <span className="text-[#00ffcc] text-sm">Fetching...</span>
+          <span className="text-[#00ffcc] text-xs bg-[#02152C] px-2 py-1 rounded shadow text-center w-full">
+            Fetching...
+          </span>
         )}
-        <button className="bg-blue-600 text-white px-4 py-1 rounded text-sm shadow">Deposit</button>
+        <button className="bg-blue-600 text-white px-4 py-1 rounded text-xs shadow w-full">Deposit</button>
+        <button className="bg-green-600 text-white px-4 py-1 rounded text-xs shadow w-full">Withdraw</button>
         <button
           onClick={() => {
             localStorage.removeItem('deriv_token');
             router.push('/auth/login');
           }}
-          className="bg-red-600 text-white px-4 py-1 rounded text-sm shadow"
+          className="bg-red-600 text-white px-4 py-1 rounded text-xs shadow w-full"
         >
           Logout
         </button>
       </div>
-   </header>
-
+    </header>
   );
 }
