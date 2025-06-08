@@ -89,22 +89,22 @@ export default function Header() {
   </nav>
 
   {/* Dynamic buttons – desktop only */}
-      <div className="fixed right-2 top-2 md:hidden flex flex-col items-end gap-2 z-50">
+      <div className="hidden md:flex items-center gap-4 ml-auto">
+        <button className="bg-green-600 text-white px-4 py-1 rounded text-sm shadow">Withdraw</button>
         {balance !== null ? (
-          <span className="text-[#00ffcc] font-bold text-xs bg-[#02152C] px-2 py-1 rounded shadow">
+          <span className="text-[#00ffcc] font-bold text-sm">
             💰 {balance.toFixed(2)} {currency} ({loginid})
           </span>
         ) : (
-          <span className="text-[#00ffcc] text-xs bg-[#02152C] px-2 py-1 rounded shadow">Fetching...</span>
+          <span className="text-[#00ffcc] text-sm">Fetching...</span>
         )}
-        <button className="bg-blue-600 text-white px-4 py-1 rounded text-xs shadow">Deposit</button>
-        <button className="bg-green-600 text-white px-4 py-1 rounded text-xs shadow">Withdraw</button>
+        <button className="bg-blue-600 text-white px-4 py-1 rounded text-sm shadow">Deposit</button>
         <button
           onClick={() => {
             localStorage.removeItem('deriv_token');
             router.push('/auth/login');
           }}
-          className="bg-red-600 text-white px-4 py-1 rounded text-xs shadow"
+          className="bg-red-600 text-white px-4 py-1 rounded text-sm shadow"
         >
           Logout
         </button>
