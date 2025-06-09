@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import RippleButton from '../components/RippleButton';
 import useAuthRedirect from '../utils/useAuthRedirect';
 import Header from '../components/Header';
+import { FaDownload } from 'react-icons/fa';
 
 export default function FreeBots() {
   useAuthRedirect();
+  const router = useRouter();
+  const [loadingBot, setLoadingBot] = useState(null);
 
   const bots = [
     {
@@ -33,28 +37,39 @@ export default function FreeBots() {
         <h1 className="text-2xl font-bold mb-2 text-blue-900">Trading Bots Library</h1>
         <p className="text-sm text-gray-600 mb-8">Click on a bot to load it in the Bot Builder</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {bots.map((bot) => (
             <div
               key={bot.id}
-              className="bg-[#06162E] rounded-lg p-4 flex flex-col justify-between min-h-[180px] shadow-md transition-transform duration-300 hover:scale-105"
+              className="bg-[#06162E] rounded-lg p-4 flex flex-col justify-between min-h-[190px] shadow-md transition-transform duration-300 hover:scale-105"
             >
               <div>
                 <h3 className="text-white text-base font-bold mb-2">{bot.name}</h3>
                 <p className="text-sm text-gray-400">{bot.description}</p>
               </div>
+
               <div className="mt-4 flex gap-2">
-                <Link href={`/bot-builder?load=${bot.id}`}>
-                  <RippleButton className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 rounded">
-                    Load Bot
-                  </RippleButton>
-                </Link>
+                <button
+                  onClick={() => {
+                    setLoadingBot(bot.id);
+                    router.push(`/bot-builder?load=${bot.id}`);
+                  }}
+                  disabled={loadingBot === bot.id}
+                  className={`flex-1 text-white text-sm py-2 rounded text-center transition duration-300 ${
+                    loadingBot === bot.id
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg'
+                  }`}
+                >
+                  {loadingBot === bot.id ? 'Loading...' : 'Load Bot'}
+                </button>
+
                 <a
                   href={`/bots/${bot.id}.xml`}
                   download
-                  className="w-full bg-green-600 hover:bg-green-700 text-white text-sm py-2 rounded text-center"
+                  className="flex-1 bg-green-600 hover:bg-green-700 hover:shadow-lg text-white text-sm py-2 rounded text-center flex items-center justify-center gap-1"
                 >
-                  Download
+                  <FaDownload className="text-xs" /> Download
                 </a>
               </div>
             </div>
