@@ -1,36 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useAuthRedirect from '../utils/useAuthRedirect';
 import Header from '../components/Header';
-
+import { XMLParser } from 'fast-xml-parser';
 
 export default function BotBuilder() {
   const router = useRouter();
   useAuthRedirect();
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  const navItems = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Bot Builder', href: '/bot-builder' },
-    { name: 'D trader', href: '/d-trader' },
-    { name: 'Tutorials', href: '/tutorials' },
-    { name: 'Analysis Tool', href: '/analysis-tool' },
-    { name: 'DP Tool', href: '/dp-tool' },
-    { name: 'Free Bots', href: '/bots' },
-    { name: 'Copy Trading', href: '/copy-trading' },
-    { name: 'Trading View', href: '/trading-view' },
-    { name: 'Risk Manager', href: '/risk-manager' },
-  ];
+  const { load } = router.query;
+  const [parsedBot, setParsedBot] = useState(null);
+  const [formData, setFormData] = useState({
+    tradeType: '',
+    market: '',
+    candleInterval: '',
+    amount: '',
+  });
+  const [error, setError] = useState(null);
+
+  // Helper to extract value by name from <field> array
+  const getFieldValue = (fields, fieldName) => {
+    if (!Array.isArray(fields)) return null;
+    const field = fields.find(f => f.name === fieldName);
+    return field?.['#text'] ?? null;
+  };
+
+  useEffect(() => {
+    if (!load) return;
+
+    const fetchAndParseXML = async () => {
+      try {
+        const res = await fetch(`/bots/${load}.xml`);
+        if (!res.ok) throw new Error('Bot file not found');
+
+        const xml = await res.text();
+        const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
+        const parsed = parser.parse(xml);
+
+        const fields = parsed?.blockly?.xml?.block?.field || [];
+
+        const extracted = {
+          tradeType: getFieldValue(fields, 'TRADETYPE'),
+          market: getFieldValue(fields, 'MARKET'),
+          candleInterval: getFieldValue(fields, 'CANDLE_INTERVAL'),
+          amount: getFieldValue(fields, 'AMOUNT'),
+        };
+
+        setParsedBot(parsed);
+        setFormData(extracted);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load and parse the bot file.');
+      }
+    };
+
+    fetchAndParseXML();
+  }, [load]);
 
   return (
     <div className="min-h-screen bg-white text-blue-900">
-      {/* Top Navbar */}
-      <Header /> 
+      <Header />
 
-      {/* Bot Builder UI */}
-      <main className="flex flex-col md:flex-row">
-        {/* Left panel */}
+      <main className="flex flex-col md:flex-row pb-24">
+        {/* Left Sidebar */}
         <aside className="w-full md:w-[250px] border-b md:border-b-0 md:border-r border-gray-300 bg-white p-4">
           <div className="font-bold text-lg bg-blue-800 text-white py-2 px-4 rounded">Quick strategy</div>
           <div className="mt-4">
@@ -59,15 +91,29 @@ export default function BotBuilder() {
             </div>
           </div>
 
+          {/* XML Preview */}
+          {parsedBot && (
+            <div className="bg-blue-50 border border-blue-200 text-sm text-blue-900 p-4 rounded mb-6 max-h-[300px] overflow-y-auto">
+              <h3 className="font-bold mb-2">🔍 Parsed XML Preview</h3>
+              <pre className="whitespace-pre-wrap break-words text-xs text-gray-800">
+                {JSON.stringify(parsedBot, null, 2)}
+              </pre>
+            </div>
+          )}
+
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {!parsedBot && load && !error && <p className="text-blue-500 mb-4">Loading bot...</p>}
+
+          {/* Auto-filled Trade Settings */}
           <div className="bg-blue-100 p-4 rounded mb-4">
-            <label className="block mb-2">Market: Derived ➡️ Continuous Indices ➡️ Volatility 1s Index</label>
-            <label className="block mb-2">Trade Type: Up/Down (Rise/Fall)</label>
+            <label className="block mb-2">Market: {formData.market || '—'}</label>
+            <label className="block mb-2">Trade Type: {formData.tradeType || '—'}</label>
             <label className="block mb-2">Contract Type: Both</label>
-            <label className="block mb-2">Default Candle Interval: 1 minute</label>
+            <label className="block mb-2">Default Candle Interval: {formData.candleInterval || '—'} minute</label>
             <div className="mt-2 text-sm">
               <input type="checkbox" defaultChecked /> Restart last trade on error
             </div>
-            <label className="block mt-4">Trade options: Ticks, Stake: $0.35</label>
+            <label className="block mt-4">Trade options: Ticks, Stake: ${formData.amount || '—'}</label>
           </div>
 
           <div className="bg-blue-100 p-4 rounded mb-4">
