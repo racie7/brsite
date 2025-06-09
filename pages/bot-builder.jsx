@@ -36,6 +36,7 @@ export default function BotBuilder() {
         const xml = await res.text();
         const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
         const parsed = parser.parse(xml);
+        console.log("RAW PARSED XML:", parsed);
 
         const fields = parsed?.blockly?.xml?.block?.field || [];
 
